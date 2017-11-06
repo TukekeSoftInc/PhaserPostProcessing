@@ -1,0 +1,28 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "sourceMap": true,
+        "removeComments": true,
+        "watch": true,
+        "alwaysStrict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noUnusedLocals": true,
+        "pretty": true,
+        "lib": [
+            "es2015",
+            "dom"
+        ],
+        "allowJs": true
+    },
+    "include": [
+        "./src/utils/",
+        "./src/renderer/"
+    ],
+    "files": [
+        "./src/globals.d.ts",
+        "./src/game.ts",
+        "./src/main.ts",
+        "./node_modules/phaser-ce/typescript/phaser.comments.d.ts"
+    ]
+}

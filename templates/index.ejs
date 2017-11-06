@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1">
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
+    <LINK type="text/css" href="css/style.css" rel="stylesheet"/>
+</head>
+
+<body id="body">
+    <span id="versionText" class="exampleText versionText">v1.0.0</span>
+    <span id="fpsText" class="exampleText fpsText"></span>
+</body>
+
+
+<script id="shader-fs" type="x-shader/x-fragment">
+
+    precision mediump float;
+
+    uniform vec2 iResolution;
+    uniform float iTime;
+
+    //resource: https://www.shadertoy.com/view/ldsGDn
+	#define LAYERS 15
+	#define DEPTH .5
+	#define WIDTH .3
+	#define SPEED .6
+
+    void main(void) { 
+	    const mat3 p = mat3(13.323122,23.5112,21.71123,21.1212,28.7312,11.9312,21.8112,14.7212,61.3934);
+        vec2 uv = vec2(1.,iResolution.y/iResolution.x)*gl_FragCoord.xy / iResolution.xy;
+        vec3 acc = vec3(0.0);
+        float dof = 5.*sin(iTime*.1);
+        for (int i=0;i<LAYERS;i++) {
+            float fi = float(i);
+            vec2 q = uv*(1.+fi*DEPTH);
+            q += vec2(q.y*(WIDTH*mod(fi*7.238917,1.)-WIDTH*.5),SPEED*iTime/(1.+fi*DEPTH*.03));
+            vec3 n = vec3(floor(q),31.189+fi);
+            vec3 m = floor(n)*.00001 + fract(n);
+            vec3 mp = (31415.9+m)/fract(p*m);
+            vec3 r = fract(mp);
+            vec2 s = abs(mod(q,1.)-.5+.9*r.xy-.45);
+            s += .01*abs(2.*fract(10.*q.yx)-1.); 
+            float d = .6*max(s.x-s.y,s.x+s.y)+max(s.x,s.y)-.01;
+            float edge = .005+.05*min(.5*abs(fi-5.-dof),1.);
+            acc += vec3(smoothstep(edge,-edge,d)*(r.x/(1.+.02*fi*DEPTH)));
+        }
+	    gl_FragColor = vec4(vec3(acc),0.1);
+     }
+</script>
+
+
+<script id="shader-vs" type="x-shader/x-vertex">
+    attribute vec3 aVertexPosition;
+    
+    uniform mat3 viewMatrix;
+    uniform mat3 clipMatrix;
+
+    void main() {
+        vec3 translated = clipMatrix * vec3(aVertexPosition.xy,1);
+        gl_Position = vec4(translated.x, -translated.y, 0, 1);
+     }
+</script>
+
+
+</html>

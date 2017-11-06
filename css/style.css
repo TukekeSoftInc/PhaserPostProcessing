@@ -1,0 +1,28 @@
+
+body {
+  margin: 0px;
+  background-color: #f6f6f6;
+  overflow: hidden;
+}
+
+.exampleText {
+  position: absolute;
+  z-index: 1;
+  background-color: transparent;
+  font-size: 1.6em;
+  text-align: center;
+  top: 5%;
+  overflow: hidden;
+  color: black;
+}
+
+.versionText {
+  left: 4%;
+  top: 0.7%;
+  font-size: 4.0vh;
+}
+.fpsText {
+  right: 3%;
+  top: 94.5%;
+  font-size: 4.0vh;
+}
